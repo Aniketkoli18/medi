@@ -18,12 +18,14 @@ private Connection connection;
 
     public PatientDAOImpl() {
         
-            try {
-              this.connection=DatabaseConnectionManager.getConnection();
-            } catch (SQLException e) {
-              
-              e.printStackTrace();
-            }
+          
+              try {
+                this.connection=DatabaseConnectionManager.getConnection();
+              } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+              }
+           
        
 }
 
