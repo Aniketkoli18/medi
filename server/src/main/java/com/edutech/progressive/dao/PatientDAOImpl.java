@@ -17,30 +17,33 @@ public class PatientDAOImpl implements PatientDAO{
 private Connection connection;
 
     public PatientDAOImpl() {
-        try{
-            this.connection=DatabaseConnectionManager.getConnection();
-        }catch(SQLException e){
-            e.printStackTrace();
-            
-        }
+        
+            try {
+              this.connection=DatabaseConnectionManager.getConnection();
+            } catch (SQLException e) {
+              
+              e.printStackTrace();
+            }
+       
 }
 
     @Override
     
     public int addPatient(Patient patient) {
-      String sql="INSERT INTO patient(full_name,date_of_birth,contact_number,email,address)VALUES(?,?,?,?,?)";
+      String sql="INSERT INTO patient(full_name, date_of_birth, contact_number, email, address)VALUES(?,?,?,?,?)";
       try{
         PreparedStatement ps= connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
         ps.setString(1,patient.getFullName());
         ps.setDate(2,new Date(patient.getDateOfBirth().getTime()) );
         ps.setString(3,patient.getContactNumber());
-        ps.setString(4,patient.getAddress());
+        ps.setString(4,patient.getEmail());
+        ps.setString(5,patient.getAddress());
         ps.executeUpdate();
         ResultSet rs= ps.getGeneratedKeys();
         if(rs.next()){
             patient.setPatientId(rs.getInt(1));
         }
-
+        return patient.getPatientId();
       }catch(SQLException e){
         e.printStackTrace();
       }
@@ -110,14 +113,14 @@ private Connection connection;
         PreparedStatement ps= connection.prepareStatement(sql);
        ResultSet rs= ps.executeQuery();
        while(rs.next()){
-        int npatientId= rs.getInt("patient_id");
+        int patientId= rs.getInt("patient_id");
             String fullName=rs.getString("full_name");
             Date dateOfBirth=new Date(rs.getDate("date_of_birth").getTime());
             String contactNumber= rs.getString("contact_number");
             String email=rs.getString("email");
             String address= rs.getString("address");
 
-            Patient patient= new Patient(npatientId, fullName, dateOfBirth, contactNumber, email, address);
+            Patient patient= new Patient(patientId, fullName, dateOfBirth, contactNumber, email, address);
             patients.add(patient);
        }
        }catch(SQLException e){

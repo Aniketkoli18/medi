@@ -10,30 +10,36 @@ import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DatabaseConnectionManager {
     private static final Properties properties=new Properties();
 
-    @Autowired
-    private static Environment env;
+    // @Autowired
+    // private static Environment env;
 
 
-    private static void loadProperties(){
-        String url=env.getProperty("spring.datasource.url");
-        String username=env.getProperty("spring.datasource.username");
-        String password= env.getProperty("spring.datasource.password");
+    private static void loadProperties()throws IOException{
+     
+        properties.load(new FileInputStream("/home/coder/app/server/src/main/resources/application.properties"));
+     
 
-        properties.put("url", url);
-        properties.put("username", username);
-        properties.put("password",password);
-
-       // properties.load(new FileInputStream("application.properties"));
+      
 
     }
 
     public static Connection getConnection()throws SQLException{
-        loadProperties();
-        return DriverManager.getConnection((String)properties.get("url"),(String)properties.get("username"),(String)properties.get("password"));
+        
+        try{
+            loadProperties();
+        
+        }catch(IOException e){
+           System.out.println(e);
+        }
+        return DriverManager.getConnection(properties.getProperty("spring.datasource.url"),properties.getProperty("spring.datasource.username"),properties.getProperty("spring.datasource.password"));
+        
+        
     }
 
 
