@@ -1,83 +1,86 @@
 package com.edutech.progressive.service.impl;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import com.edutech.progressive.dao.DoctorDAOImpl;
+import com.edutech.progressive.dao.DoctorDAO;
 import com.edutech.progressive.entity.Doctor;
 import com.edutech.progressive.service.DoctorService;
 
-public class DoctorServiceImplJdbc implements DoctorService  {
-  DoctorDAOImpl doctorDAOImpl;
-  
-  
+public class DoctorServiceImplJdbc  implements DoctorService{
 
-    public DoctorServiceImplJdbc(DoctorDAOImpl doctorDAOImpl) {
-    this.doctorDAOImpl = doctorDAOImpl;
-  }
+      private DoctorDAO doctorDAO;
 
-    @Override
-    public List<Doctor> getAllDoctors() {
-      List<Doctor>a= new ArrayList<>();
-      try{
-        a=doctorDAOImpl.getAllDoctors();
+    
 
-      }catch(SQLException e){
-        e.printStackTrace();
-      }
-      return a;
+    public DoctorServiceImplJdbc(DoctorDAO doctorDAO) {
+        this.doctorDAO = doctorDAO;
     }
 
-    public Doctor getDoctorById(int doctorId){
-        try{
-          return doctorDAOImpl.getDoctorById(doctorId);
-        }catch(SQLException e){
-          e.printStackTrace();
+    @Override
+    public List<Doctor> getAllDoctors() throws Exception  {
+       List<Doctor> doctors=null;
+        try {
+            doctors= doctorDAO.getAllDoctors();
+        } catch (Exception e) {
+           throw e;
         }
-        return null;
+     
+        return doctors;
     }
-    @Override
-    public Integer addDoctor(Doctor doctor) {
-      Integer a=null;
-      try{
-        a=doctorDAOImpl.addDoctor(doctor);
-
-      }catch(SQLException e){
-        e.printStackTrace();
-      }
-      return a;
-    }
-
 
     @Override
-    public List<Doctor> getDoctorSortedByExperience() {
-       List<Doctor>a= new ArrayList<>();
-       try{
-        a=doctorDAOImpl.getAllDoctors();
-       }catch(SQLException e){
-        e.printStackTrace();
-       }
-       Collections.sort(a,Comparator.comparing(Doctor::getYearsOfExperience));
-       return a;
-    }
+    public Integer addDoctor(Doctor doctor) throws Exception  {
+         try {
 
-    public void updateDoctor(Doctor doctor){
-      try{
-        doctorDAOImpl.updateDoctor(doctor);
-      }catch(SQLException e){
-        e.printStackTrace();
-      }
-
-    }
-    public void deleteDoctor(int doctorId){
-        try{
-          doctorDAOImpl.deleteDoctor(doctorId);
-        }catch(SQLException e){
-          e.printStackTrace();
+            Integer id=doctorDAO.addDoctor(doctor);
+            if(id!=null && id>0){
+                doctor.setDoctorId(id);
+            }
+             return id;
+        } catch (Exception e) {
+          throw e;
         }
     }
+
+    @Override
+    public List<Doctor> getDoctorSortedByExperience()throws Exception  {
+        List<Doctor> doctors=null;
+        try {
+            doctors= doctorDAO.getAllDoctors();
+             Collections.sort(doctors);
+            
+        } catch (Exception e) {
+           throw e;
+        }
+     
+        return doctors;
+        
+    }
+
+     public void updateDoctor(Doctor doctor) throws Exception {
+        try {
+            doctorDAO.updateDoctor(doctor);;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void deleteDoctor(int doctorId) throws Exception {
+        try {
+            doctorDAO.deleteDoctor(doctorId);;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public Doctor getDoctorById(int doctorId) throws Exception{
+          try {
+          return doctorDAO.getDoctorById(doctorId);
+        } catch (Exception e) {
+        throw e;
+        }
+    }
+
 
 }
