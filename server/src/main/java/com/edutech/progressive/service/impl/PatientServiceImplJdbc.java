@@ -1,83 +1,76 @@
 package com.edutech.progressive.service.impl;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
+
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import com.edutech.progressive.dao.PatientDAOImpl;
+import com.edutech.progressive.dao.PatientDAO;
 import com.edutech.progressive.entity.Patient;
 import com.edutech.progressive.service.PatientService;
 
 public class PatientServiceImplJdbc implements PatientService {
 
-    PatientDAOImpl patientDAOImpl;
+    private PatientDAO patientDAO;
 
-    
-    public PatientServiceImplJdbc(PatientDAOImpl patientDAOImpl) {
-        this.patientDAOImpl = patientDAOImpl;
+    public PatientServiceImplJdbc(PatientDAO patientDAO) {
+        this.patientDAO = patientDAO;
     }
 
     @Override
-    public List<Patient> getAllPatients() {
-        List<Patient>a= new ArrayList<>();
-        try{
-       a=patientDAOImpl.getAllPatients();
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-       return a;
-    }
-
-    @Override
-    public Integer addPatient(Patient patient) {
-        Integer a=null;
-        try{
-        a= patientDAOImpl.addPatient(patient);
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-        return a;
-    }
-
-    @Override
-    public List<Patient> getAllPatientSortedByName() {
-       List<Patient>l=new ArrayList<>();
-       try{
-        l=patientDAOImpl.getAllPatients();
-       }catch(SQLException e){
-        e.printStackTrace();
-       }
-      Collections.sort(l,Comparator.comparing(Patient::getFullName));
-      return l;
-    }
-
-    public void updatePatient(Patient patient){
-        try{
-        patientDAOImpl.updatePatient(patient);
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-
-    }
-    public void deletePatient(int patientId){
-
+    public List<Patient> getAllPatients() throws Exception {
+        List<Patient> patients = null;
         try {
-            patientDAOImpl.deletePatient(patientId);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            patients = patientDAO.getAllPatients();
+        } catch (Exception e) {
+            throw e;
         }
+
+        return patients;
     }
-    public Patient getPatientById(int patientId){
+
+    @Override
+    public Integer addPatient(Patient patient) throws Exception {
         try {
-            return patientDAOImpl.getPatientById(patientId);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            return patientDAO.addPatient(patient);
+        } catch (Exception e) {
+            throw e;
         }
-        return null;
     }
+
+    @Override
+    public List<Patient> getAllPatientSortedByName() throws Exception {
+        List<Patient> patients = null;
+        try {
+            patients = patientDAO.getAllPatients();
+            Collections.sort(patients);
+        } catch (Exception e) {
+            throw e;
+        }
+        return patients;
+    }
+
+    public void updatePatient(Patient patient) throws Exception {
+        try {
+            patientDAO.updatePatient(patient);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void deletePatient(int patientId) throws Exception {
+        try {
+            patientDAO.deletePatient(patientId);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public Patient getPatientById(int patientId) throws Exception{
+          try {
+          return patientDAO.getPatientById(patientId);
+        } catch (Exception e) {
+        throw e;
+        }
+    }
+
 }
