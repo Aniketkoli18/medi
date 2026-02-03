@@ -22,30 +22,62 @@ public class PatientServiceImplJdbc implements PatientService {
     @Override
     public List<Patient> getAllPatients() {
         List<Patient>a= new ArrayList<>();
+        try{
        a=patientDAOImpl.getAllPatients();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
        return a;
     }
 
     @Override
     public Integer addPatient(Patient patient) {
-        return patientDAOImpl.addPatient(patient);
+        Integer a=null;
+        try{
+        a= patientDAOImpl.addPatient(patient);
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        return a;
     }
 
     @Override
     public List<Patient> getAllPatientSortedByName() {
-       List<Patient>l=patientDAOImpl.getAllPatients();
+       List<Patient>l=new ArrayList<>();
+       try{
+        l=patientDAOImpl.getAllPatients();
+       }catch(SQLException e){
+        e.printStackTrace();
+       }
       Collections.sort(l,Comparator.comparing(Patient::getFullName));
       return l;
     }
 
     public void updatePatient(Patient patient){
+        try{
         patientDAOImpl.updatePatient(patient);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
 
     }
     public void deletePatient(int patientId){
-        patientDAOImpl.deletePatient(patientId);
+
+        try {
+            patientDAOImpl.deletePatient(patientId);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     public Patient getPatientById(int patientId){
-        return patientDAOImpl.getPatientById(patientId);
+        try {
+            return patientDAOImpl.getPatientById(patientId);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -28,8 +28,8 @@ private static List<Patient>patientList= new ArrayList<>();
        return patientList;
     }
 
-//     public void emptyArrayList(){
-// patientList.clear();
-//     }
+    public void emptyArrayList(){
+patientList.clear();
+    }
 
 }

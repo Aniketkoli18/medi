@@ -29,6 +29,9 @@ public List<Doctor> getDoctorSortedByExperience() {
    return doctorList;
 }
 
+public void emptyArrayList(){
+    doctorList.clear();
+}
 
 
 }
